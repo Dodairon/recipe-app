@@ -11,6 +11,7 @@ import ExploreDrinksIngredients from '../Pages/ExploreDrinksIngredients';
 import ExploreFoodsNationalities from '../Pages/ExploreFoodsNationalities';
 import Profile from '../Pages/Profile';
 
+
 function Routes() {
   return (
     <BrowserRouter>
