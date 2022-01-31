@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import context from '../context/context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './searchBar';
 
 function Header(props) {
   const [showSearch, setshowSearch] = useState(false);
-  const { display, title } = props;
+  const { title } = props;
+  const { display } = useContext(context);
 
   function Search(value) {
     return setshowSearch(!value);
@@ -42,18 +45,13 @@ function Header(props) {
             />
           </button>
         ) }
-      { showSearch && 'teste' }
+      { showSearch && <SearchBar /> }
     </div>
   );
 }
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  display: PropTypes.bool,
-};
-
-Header.defaultProps = {
-  display: false,
 };
 
 export default Header;

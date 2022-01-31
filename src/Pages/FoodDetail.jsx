@@ -1,28 +1,22 @@
 import React, { useContext } from 'react';
 import context from '../context/context';
-import Header from '../components/header';
 import Footer from '../components/Footer';
 
-function Recipes() {
-  const { result, display, setDisplay, setDrinkScreen } = useContext(context);
-  setDisplay(true);
-  setDrinkScreen(false);
-  const twelve = 12;
-  const twelveMeals = result.slice(0, twelve);
+function FoodDetail() {
+  const { result } = useContext(context);
 
   return (
     <div>
-      <Header display={ display } title="Delivery App" />
-      <h1>Recipes</h1>
+      Food Detail
       {
-        twelveMeals.map((e, i) => (
+        result.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>
             <p data-testid={ `${i}-card-name` }>{e.strMeal}</p>
             <img
               data-testid={ `${i}-card-img` }
               src={ e.strMealThumb }
               alt=""
-              width="200px"
+              width="300px"
             />
           </div>
         ))
@@ -32,4 +26,4 @@ function Recipes() {
   );
 }
 
-export default Recipes;
+export default FoodDetail;
