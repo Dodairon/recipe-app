@@ -1,11 +1,14 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Routes from './Routes/Routes';
+import Routes from './Routes';
+import Provider from './context/provider';
 
 function App() {
   return (
     <div className="meals">
-      <Routes />
+      <Provider>
+        <Routes />
+      </Provider>
     </div>
   );
 }
