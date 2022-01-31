@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import context from '../context/context';
+import Footer from '../components/Footer';
 
 function Drinks() {
   const { result } = useContext(context);
@@ -19,6 +20,7 @@ function Drinks() {
           </div>
         ))
       }
+      <Footer />
     </div>
   );
 }

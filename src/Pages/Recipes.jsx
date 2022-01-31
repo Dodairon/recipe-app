@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import context from '../context/context';
+import Header from '../components/header';
+import Footer from '../components/Footer';
 
-function Foods() {
+function Recipes() {
   const { result } = useContext(context);
-
+  const display = true;
   return (
     <div>
-      Foods
+      <Header display={ display } title="Delivery App" />
+      <h1>Recipes</h1>
       {
         result.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>
@@ -20,8 +23,9 @@ function Foods() {
           </div>
         ))
       }
+      <Footer />
     </div>
   );
 }
 
-export default Foods;
+export default Recipes;
