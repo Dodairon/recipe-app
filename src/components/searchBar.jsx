@@ -1,29 +1,36 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import API from '../services/API';
 import context from '../context/context';
 
-const ingredient = 'lemon';
-const drinkScreen = false;
 const msg1 = 'Your search must have only 1 (one) character';
 const msg2 = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function SearchBar() {
+  const { url, setResult, drinkScreen } = useContext(context);
+  const [ingredient, setIngredient] = useState('');
   const history = useHistory();
-  const { url, setResult } = useContext(context);
 
   const caseMeal = (meals) => {
+    if (meals.length > 1) history.push('/foods');
+    if (meals.length === 1) history.push(`/foods/${meals[0].idMeal}`);
     setResult(meals);
-    if (meals === null || meals === undefined) global.alert(msg2);
-    else if (meals.length > 1) history.push('/foods');
-    else if (meals.length === 1) history.push(`/foods/${meals[0].idMeal}`);
   };
 
   const caseDrink = (drinks) => {
+    if (drinks.length > 1) history.push('/drinks');
+    if (drinks.length === 1) history.push(`/drinks/${drinks[0].idDrink}`);
     setResult(drinks);
+  };
+
+  const msgMeals = (meals) => {
+    if (meals === null || meals === undefined) global.alert(msg2);
+    else caseMeal(meals);
+  };
+
+  const msgDrink = (drinks) => {
     if (drinks === null || drinks === undefined) global.alert(msg2);
-    else if (drinks.length > 1) history.push('/drinks');
-    else if (drinks.length === 1) history.push(`/drinks/${drinks[0].idDrink}`);
+    else caseDrink(drinks);
   };
 
   const btnSearch = () => {
@@ -36,16 +43,21 @@ function SearchBar() {
       if (checkA && ingredient.length > 1) global.alert(msg1);
       else
       if (checkB && !drinkScreen) {
-        API(url.meals[i], ingredient).then((r) => caseMeal(r.meals));
+        API(url.meals[i], ingredient).then((r) => msgMeals(r.meals));
       }
       if (checkB && drinkScreen) {
-        API(url.drinks[i], ingredient).then((r) => caseDrink(r.drinks));
+        API(url.drinks[i], ingredient).then((r) => msgDrink(r.drinks));
       }
     });
   };
 
   return (
     <div>
+      <input
+        type="text"
+        data-testid="search-input"
+        onChange={ ({ target: { value } }) => setIngredient(value) }
+      />
       <label htmlFor="ingredient">
         <input
           id="ingredient"

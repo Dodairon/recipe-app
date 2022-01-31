@@ -4,21 +4,25 @@ import Header from '../components/header';
 import Footer from '../components/Footer';
 
 function Recipes() {
-  const { result } = useContext(context);
-  const display = true;
+  const { result, display, setDisplay, setDrinkScreen } = useContext(context);
+  setDisplay(true);
+  setDrinkScreen(false);
+  const twelve = 12;
+  const twelveMeals = result.slice(0, twelve);
+
   return (
     <div>
       <Header display={ display } title="Delivery App" />
       <h1>Recipes</h1>
       {
-        result.map((e, i) => (
+        twelveMeals.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>
             <p data-testid={ `${i}-card-name` }>{e.strMeal}</p>
             <img
               data-testid={ `${i}-card-img` }
               src={ e.strMealThumb }
               alt=""
-              width="300px"
+              width="200px"
             />
           </div>
         ))

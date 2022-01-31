@@ -1,6 +1,5 @@
 import React from 'react';
 import LoginForm from '../components/loginForm';
-import SearchBar from '../components/searchBar';
 import rockGlass from '../images/rockGlass.svg';
 
 function Login() {
@@ -15,7 +14,6 @@ function Login() {
         Glass
       </object>
       <LoginForm />
-      <SearchBar />
     </div>
   );
 }
