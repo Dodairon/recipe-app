@@ -8,7 +8,7 @@ import Header from '../components/header';
 function ExploreFoods({ history }) {
   return (
     <div>
-      <Header display title="Explore Foods" />
+      <Header display={ false } title="Explore Foods" />
       <Link to="/explore/foods/ingredients" data-testid="explore-by-ingredient">
         By Ingredient
       </Link>
