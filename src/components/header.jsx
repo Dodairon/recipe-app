@@ -1,19 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-// import context from '../context/context';
+import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './searchBar';
 
 function Header(props) {
-  const [showSearch, setshowSearch] = useState(false);
-  const { title, history, display } = props;
-  // const { display } = useContext(context);
-
-  function Search(value) {
-    return setshowSearch(!value);
-  }
-
+  const [showSearch, setShowSearch] = useState(false);
+  const { title, display, drinkScreen } = props;
+  const history = useHistory();
   return (
     <div>
       <button
@@ -34,7 +29,7 @@ function Header(props) {
         && (
           <button
             type="button"
-            onClick={ () => Search(showSearch) }
+            onClick={ () => setShowSearch(!showSearch) }
           >
             <img
               data-testid="search-top-btn"
@@ -43,15 +38,23 @@ function Header(props) {
             />
           </button>
         ) }
-      { showSearch && <SearchBar /> }
+      { showSearch && <SearchBar drinkScreen={ drinkScreen } /> }
     </div>
   );
 }
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
-  display: PropTypes.bool.isRequired,
+  display: PropTypes.bool,
+  drinkScreen: PropTypes.bool,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+Header.defaultProps = {
+  display: false,
+  drinkScreen: false,
 };
 
 export default Header;
