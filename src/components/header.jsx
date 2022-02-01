@@ -1,15 +1,14 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import context from '../context/context';
+import React, { useState } from 'react';
+// import context from '../context/context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './searchBar';
 
 function Header(props) {
   const [showSearch, setshowSearch] = useState(false);
-  const { title } = props;
-  const { display } = useContext(context);
+  const { title, history, display } = props;
+  // const { display } = useContext(context);
 
   function Search(value) {
     return setshowSearch(!value);
@@ -17,15 +16,14 @@ function Header(props) {
 
   return (
     <div>
-      <Link
-        to="/profile"
+      <button
+        type="button"
         data-testid="profile-top-btn"
+        src={ profileIcon }
+        onClick={ () => history.push('/profile') }
       >
-        <img
-          src={ profileIcon }
-          alt="profile"
-        />
-      </Link>
+        <img src={ profileIcon } alt="profile" />
+      </button>
       <h1
         data-testid="page-title"
       >
@@ -36,10 +34,10 @@ function Header(props) {
         && (
           <button
             type="button"
-            data-testid="search-top-btn"
             onClick={ () => Search(showSearch) }
           >
             <img
+              data-testid="search-top-btn"
               src={ searchIcon }
               alt="profile"
             />
@@ -52,6 +50,8 @@ function Header(props) {
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  display: PropTypes.bool.isRequired,
 };
 
 export default Header;

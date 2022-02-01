@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/header';
 
 function Drinks() {
-  const { result, display, setDisplay, setDrinkScreen } = useContext(context);
+  const { result, setDisplay, setDrinkScreen } = useContext(context);
   setDisplay(true);
   setDrinkScreen(true);
   const twelve = 12;
@@ -12,7 +12,7 @@ function Drinks() {
 
   return (
     <div>
-      <Header display={ display } title="Delivery App" />
+      <Header display title="Drinks" />
       <h1>Drinks</h1>
       {
         twelveDrinks.map((e, i) => (
