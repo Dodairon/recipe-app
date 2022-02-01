@@ -1,27 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import context from '../context/context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './searchBar';
 
 function Header(props) {
-  const [showSearch, setshowSearch] = useState(false);
-  const { title } = props;
-  const { display } = useContext(context);
-
-  function Search(value) {
-    return setshowSearch(!value);
-  }
+  const [showSearch, setShowSearch] = useState(false);
+  const { title, display, drinkScreen } = props;
 
   return (
     <div>
       <Link
         to="/profile"
-        data-testid="profile-top-btn"
       >
         <img
+          data-testid="profile-top-btn"
           src={ profileIcon }
           alt="profile"
         />
@@ -36,22 +30,29 @@ function Header(props) {
         && (
           <button
             type="button"
-            data-testid="search-top-btn"
-            onClick={ () => Search(showSearch) }
+            onClick={ () => setShowSearch(!showSearch) }
           >
             <img
+              data-testid="search-top-btn"
               src={ searchIcon }
               alt="profile"
             />
           </button>
         ) }
-      { showSearch && <SearchBar /> }
+      { showSearch && <SearchBar drinkScreen={ drinkScreen } /> }
     </div>
   );
 }
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
+  display: PropTypes.bool,
+  drinkScreen: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  display: false,
+  drinkScreen: false,
 };
 
 export default Header;

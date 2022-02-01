@@ -8,7 +8,7 @@ import { getRandomDrink } from '../services/api';
 function ExploreDrinks({ history }) {
   return (
     <div>
-      <Header display title="Explore Drinks" />
+      <Header title="Explore Drinks" />
       <Link
         to="/explore/drinks/ingredients"
         data-testid="explore-by-ingredient"

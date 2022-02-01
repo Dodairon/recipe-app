@@ -12,3 +12,9 @@ export const getRandomFood = async () => {
   const res = await (await fetch(`${foodApi}random.php`)).json();
   return res.meals[0].idMeal;
 };
+
+export default async function API(url, ingredient) {
+  const response = await fetch(`${url}${ingredient}`);
+  const result = await response.json().catch((err) => err);
+  return result;
+}

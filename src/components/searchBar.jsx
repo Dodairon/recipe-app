@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import API from '../services/API';
+import API from '../services/api';
 import context from '../context/context';
 
 const msg1 = 'Your search must have only 1 (one) character';
 const msg2 = 'Sorry, we haven\'t found any recipes for these filters.';
 
-function SearchBar() {
-  const { url, setResult, drinkScreen } = useContext(context);
+function SearchBar({ drinkScreen }) {
+  const { url, setResult } = useContext(context);
   const [ingredient, setIngredient] = useState('');
   const history = useHistory();
 
@@ -23,16 +24,6 @@ function SearchBar() {
     setResult(drinks);
   };
 
-  const msgMeals = (meals) => {
-    if (meals === null || meals === undefined) global.alert(msg2);
-    else caseMeal(meals);
-  };
-
-  const msgDrink = (drinks) => {
-    if (drinks === null || drinks === undefined) global.alert(msg2);
-    else caseDrink(drinks);
-  };
-
   const btnSearch = () => {
     const radios = document.getElementsByName('ipt');
 
@@ -41,12 +32,15 @@ function SearchBar() {
       const checkB = e.checked && e.id === url.searchFor[i];
 
       if (checkA && ingredient.length > 1) global.alert(msg1);
-      else
-      if (checkB && !drinkScreen) {
-        API(url.meals[i], ingredient).then((r) => msgMeals(r.meals));
+      else if (checkB && !drinkScreen) {
+        API(url.meals[i], ingredient)
+          .then((r) => caseMeal(r.meals))
+          .catch(() => global.alert(msg2));
       }
       if (checkB && drinkScreen) {
-        API(url.drinks[i], ingredient).then((r) => msgDrink(r.drinks));
+        API(url.drinks[i], ingredient)
+          .then((r) => caseDrink(r.drinks))
+          .catch(() => global.alert(msg2));
       }
     });
   };
@@ -85,11 +79,7 @@ function SearchBar() {
         />
         First letter
       </label>
-      <button
-        type="button"
-        data-testid="exec-search-btn"
-        onClick={ btnSearch }
-      >
+      <button type="button" data-testid="exec-search-btn" onClick={ btnSearch }>
         Search
       </button>
     </div>
@@ -97,3 +87,11 @@ function SearchBar() {
 }
 
 export default SearchBar;
+
+SearchBar.propTypes = {
+  drinkScreen: PropTypes.bool,
+};
+
+SearchBar.defaultProps = {
+  drinkScreen: false,
+};
