@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import copy from 'clipboard-copy';
+import context from '../context/context';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const Container = styled.div`
   display: flex;
@@ -23,12 +25,21 @@ const Image = styled.img`
   height: auto;
 `;
 
-function DoneRecipesCard({ recipe, index }) {
-  const [isShared, setIsShared] = React.useState(false);
+function RecipeCard({ recipe, index, favorite }) {
+  const [isShared, setIsShared] = useState(false);
+
+  const { setFavoriteRecipes } = useContext(context);
 
   function handleShareClick() {
     copy(`${window.location.origin}/${recipe.type}s/${recipe.id}`);
     setIsShared(true);
+  }
+
+  function onFavorite(id) {
+    const recipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newRecipes = recipes.filter((rep) => rep.id !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newRecipes));
+    setFavoriteRecipes(newRecipes);
   }
 
   return (
@@ -47,6 +58,15 @@ function DoneRecipesCard({ recipe, index }) {
           alt="Share"
         />
       </button>
+      {favorite && (
+        <button type="button" onClick={ () => onFavorite(recipe.id) }>
+          <img
+            data-testid={ `${index}-horizontal-favorite-btn` }
+            src={ blackHeartIcon }
+            alt="Favorite"
+          />
+        </button>
+      )}
       {isShared && <p>Link copied!</p>}
       <p data-testid={ `${index}-horizontal-top-text` }>
         {recipe.type === 'drink' ? recipe.alcoholicOrNot : recipe.nationality}
@@ -58,29 +78,37 @@ function DoneRecipesCard({ recipe, index }) {
       <Link to={ `/${recipe.type}s/${recipe.id}` }>
         <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
       </Link>
-      <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-      {recipe.tags.map((tag, i) => (
-        <span data-testid={ `${index}-${tag}-horizontal-tag` } key={ i }>
-          {tag}
-        </span>
-      ))}
+      {!favorite && (
+        <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
+      )}
+      {!favorite
+        && recipe.tags.map((tag, i) => (
+          <span data-testid={ `${index}-${tag}-horizontal-tag` } key={ i }>
+            {tag}
+          </span>
+        ))}
     </Container>
   );
 }
 
-export default DoneRecipesCard;
+export default RecipeCard;
 
-DoneRecipesCard.propTypes = {
+RecipeCard.propTypes = {
   recipe: PropTypes.shape({
     image: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
     nationality: PropTypes.string.isRequired,
-    doneDate: PropTypes.string.isRequired,
+    doneDate: PropTypes.string,
     alcoholicOrNot: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
     type: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
+  favorite: PropTypes.bool,
   index: PropTypes.number.isRequired,
+};
+
+RecipeCard.defaultProps = {
+  favorite: false,
 };

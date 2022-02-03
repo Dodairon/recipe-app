@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import DoneRecipesCard from '../components/DoneRecipeCard';
+import RecipeCard from '../components/RecipeCard';
 import Header from '../components/header';
 
 function DoneRecipes() {
@@ -37,7 +37,7 @@ function DoneRecipes() {
       {doneRecipes
         .filter((recipe) => recipe.type === filter || filter === 'all')
         .map((recipe, i) => (
-          <DoneRecipesCard key={ i } index={ i } recipe={ recipe } />
+          <RecipeCard key={ i } index={ i } recipe={ recipe } />
         ))}
     </div>
   );
