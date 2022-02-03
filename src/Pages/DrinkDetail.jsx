@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
+import DetailsDrink from '../components/drinkDetail';
 import context from '../context/context';
-import Footer from '../components/Footer';
 
 function DrinkDetail() {
   const { result } = useContext(context);
@@ -21,7 +21,7 @@ function DrinkDetail() {
           </div>
         ))
       }
-      <Footer />
+      <DetailsDrink />
     </div>
   );
 }

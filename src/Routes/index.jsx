@@ -14,6 +14,7 @@ import ExploreFoodsNationalities from '../Pages/ExploreFoodsNationalities';
 import Profile from '../Pages/Profile';
 import FavoriteRecipes from '../Pages/FavoriteRecipes';
 import DoneRecipes from '../Pages/DoneRecipes';
+import FoodInProgress from '../Pages/FoodInProgress';
 
 function Routes() {
   return (
@@ -45,9 +46,9 @@ function Routes() {
         <Route exact path="/profile" component={ Profile } />
         <Route exact path="/done-recipes" component={ DoneRecipes } />
         <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+        <Route exact path="food/:id/in-progress" component={ FoodInProgress } />
         {/* <Route exact path={ `/foods/${iddareceit}` } component={ } />
         <Route exact path={ `/drinks/${iddareceita}` } component={ } />
-        <Route exact path={ `/food/${iddareceita}/in-progress` } component={ } />
         <Route exact path={ `/drink/${iddareceita}/in-progress` } component={ } /> */}
       </Switch>
     </BrowserRouter>

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
+import DetailsFood from '../components/foodDetail';
 import context from '../context/context';
-import Footer from '../components/Footer';
 
 function FoodDetail() {
   const { result } = useContext(context);
 
   return (
     <div>
-      Food Detail
+      <h1>Food Detail</h1>
       {
         result.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>
@@ -21,7 +21,7 @@ function FoodDetail() {
           </div>
         ))
       }
-      <Footer />
+      <DetailsFood />
     </div>
   );
 }

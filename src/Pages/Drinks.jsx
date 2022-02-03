@@ -4,8 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/header';
 
 function Drinks() {
-  const { result, setDisplay, setDrinkScreen } = useContext(context);
-  setDisplay(true);
+  const { result, setDrinkScreen } = useContext(context);
   setDrinkScreen(true);
   const twelve = 12;
   const twelveDrinks = result.slice(0, twelve);

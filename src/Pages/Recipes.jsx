@@ -6,8 +6,7 @@ import Footer from '../components/Footer';
 
 function Recipes(props) {
   const { history } = props;
-  const { result, setDisplay, setDrinkScreen } = useContext(context);
-  setDisplay(true);
+  const { result, setDrinkScreen } = useContext(context);
   setDrinkScreen(false);
   const twelve = 12;
   const twelveMeals = result.slice(0, twelve);
@@ -19,13 +18,13 @@ function Recipes(props) {
       {
         twelveMeals.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>
-            <p data-testid={ `${i}-card-name` }>{ e.strMeal }</p>
             <img
               data-testid={ `${i}-card-img` }
               src={ e.strMealThumb }
               alt=""
               width="200px"
             />
+            <p data-testid={ `${i}-card-name` }>{ e.strMeal }</p>
           </div>
         ))
       }

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-// import context from '../context/context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './searchBar';
@@ -8,7 +7,6 @@ import SearchBar from './searchBar';
 function Header(props) {
   const [showSearch, setshowSearch] = useState(false);
   const { title, history, display } = props;
-  // const { display } = useContext(context);
 
   function Search(value) {
     return setshowSearch(!value);
