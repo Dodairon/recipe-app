@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import context from '../context/context';
 
 function LoginForm() {
+  const { setfilterResult } = useContext(context);
   const [disable, setDisable] = useState(true);
   const [user, setUser] = useState({
     email: '',
@@ -23,6 +25,7 @@ function LoginForm() {
     localStorage.setItem('user', JSON.stringify({ email: user.email }));
     localStorage.setItem('mealsToken', JSON.stringify(1));
     localStorage.setItem('cocktailsToken', JSON.stringify(1));
+    setfilterResult();
   };
 
   return (

@@ -4,6 +4,7 @@ import urlContext from './context';
 
 export default function Provider({ children }) {
   const [result, setResult] = useState([]);
+  const [filterResult, setfilterResult] = useState();
   const [url, setUrl] = useState({
     searchFor: ['ingredient', 'name', 'first-letter'],
     meals: [
@@ -25,6 +26,8 @@ export default function Provider({ children }) {
         setUrl,
         result,
         setResult,
+        filterResult,
+        setfilterResult,
       } }
     >
       { children }
