@@ -18,7 +18,7 @@ function Recipes() {
   useEffect(() => {
     getCategoryFood().then((food) => setCatFood(food));
     API(url.meals[1], nada).then((firstFood) => setResultFood(firstFood.meals));
-  }, []);
+  }, [url]);
 
   return (
     <div>

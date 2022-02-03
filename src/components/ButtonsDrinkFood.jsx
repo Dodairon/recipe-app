@@ -11,7 +11,6 @@ function ButtonsDrinkFood(props) {
   const verifyFilter = filterButton.meals ? filterButton.meals : filterButton.drinks;
 
   useEffect(() => {
-    console.log(filterButton.meals);
     if (toggleButton !== 'all') {
       if (filterButton.meals) {
         filterMealsAPI(toggleButton)
@@ -23,7 +22,7 @@ function ButtonsDrinkFood(props) {
     } else {
       setfilterResult();
     }
-  }, [toggleButton]);
+  }, [toggleButton, setfilterResult, filterButton]);
 
   function clickToggle({ strCategory }) {
     if (toggleButton === strCategory) {

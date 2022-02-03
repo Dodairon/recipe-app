@@ -18,7 +18,7 @@ function Drinks() {
   useEffect(() => {
     getCategoryDrink().then((Drink) => setCatDrink(Drink));
     API(url.drinks[1], nada).then((firstDrink) => setResultDrink(firstDrink.drinks));
-  }, []);
+  }, [url]);
 
   return (
     <div>
