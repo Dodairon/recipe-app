@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import context from '../context/context';
 import drinkIcon from '../images/drinkIcon.svg';
 import exploreIcon from '../images/exploreIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
@@ -20,15 +21,22 @@ const FooterStyled = styled.footer`
 `;
 
 function Footer() {
+  const { setfilterResult } = useContext(context);
   return (
     <FooterStyled data-testid="footer">
-      <Link to="/drinks">
+      <Link
+        onClick={ () => setfilterResult() }
+        to="/drinks"
+      >
         <img src={ drinkIcon } data-testid="drinks-bottom-btn" alt="Drinks" />
       </Link>
       <Link to="/explore">
         <img src={ exploreIcon } data-testid="explore-bottom-btn" alt="Explore" />
       </Link>
-      <Link to="/foods">
+      <Link
+        onClick={ () => setfilterResult() }
+        to="/foods"
+      >
         <img src={ mealIcon } data-testid="food-bottom-btn" alt="Food" />
       </Link>
     </FooterStyled>

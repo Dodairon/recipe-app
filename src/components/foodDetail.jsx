@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import WhiteHearthIcon from '../images/whiteHeartIcon.svg';
@@ -11,16 +11,16 @@ export default function DetailsFood() {
   const [images, setImages] = useState([]);
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const [copy, setCopy] = useState(false);
   const [fav, setFav] = useState(false);
-  const [recipeAlreadyMade, setRecipeAlreadyMade] = useState(false);
+  const [copy, setCopy] = useState(false);
   const [recipeInProgress, setRecipeInProgress] = useState(false);
+  const [recipeAlreadyMade, setRecipeAlreadyMade] = useState(false);
   const history = useHistory();
-  const id = 52771;
+  const params = useParams();
+  const { id } = params;
+  const six = 6;
 
-  const btnStart = () => {
-    history.push(`/food/${id}/in-progress`);
-  };
+  const btnStart = () => history.push(`/foods/${id}/in-progress`);
 
   const btnShare = () => {
     clipboardCopy(window.location.href);
@@ -34,7 +34,7 @@ export default function DetailsFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(
         [{
           id: e.idMeal,
-          type: 'comida',
+          type: 'food',
           nationality: e.strArea,
           category: e.strCategory,
           alcoholicOrNot: '',
@@ -44,46 +44,45 @@ export default function DetailsFood() {
       ));
     });
   };
-
+  console.log(images);
   // API
   useEffect(() => {
     API().then((r) => setImages(r));
-    API2().then((r) => setRecipe(r));
-    API3().then((r) => setIngredients(r));
-  }, []);
+    API2(id).then((r) => setRecipe(r));
+    API3(id).then((r) => setIngredients(r));
+  }, [id]);
 
   // check recipes already made
   useEffect(() => {
-    JSON.parse(localStorage.getItem('doneRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setRecipeAlreadyMade(false);
-        else setRecipeAlreadyMade(false);
-      });
-  }, []);
+    const storage = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    storage.forEach((e) => {
+      if (e.id.includes(id)) setRecipeAlreadyMade(true);
+      else setRecipeAlreadyMade(false);
+    });
+  }, [id]);
 
-  // check recipes in progress
+  // check in progress recipes
   useEffect(() => {
-    JSON.parse(localStorage.getItem('inProgressRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setRecipeInProgress(true);
-        else setRecipeInProgress(false);
-      });
+    const storage = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { meals: [] };
+    const isInProgress = (Object.keys(storage.meals).includes(id));
+    setRecipeInProgress(isInProgress);
   }, []);
 
   // check favorite recipes
   useEffect(() => {
-    JSON.parse(localStorage.getItem('favoriteRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setFav(true);
-        else setFav(false);
-      });
-  }, []);
+    const storage = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    storage.forEach((e) => {
+      if (e.id === id) setFav(true);
+      else setFav(false);
+    });
+  }, [id]);
 
   return (
     <div>
       {
         recipe.map((e, i) => (
-          <div data-testid={ `${i}-recipe-card` } key={ i }>
+          <div key={ i }>
             <img
               data-testid="recipe-photo"
               src={ e.strMealThumb }
@@ -103,10 +102,13 @@ export default function DetailsFood() {
             <button
               type="button"
               className="favorite-btn"
-              data-testid="favorite-btn"
               onClick={ btnFav }
             >
-              <img src={ fav ? BlackHearthIcon : WhiteHearthIcon } alt="" />
+              <img
+                data-testid="favorite-btn"
+                src={ fav ? BlackHearthIcon : WhiteHearthIcon }
+                alt=""
+              />
             </button>
             <p>{copy && 'Link copied!'}</p>
             <hr />
@@ -124,19 +126,35 @@ export default function DetailsFood() {
             <hr />
             <p data-testid="instructions">{ e.strInstructions }</p>
             <hr />
-            <video data-testid="video" controls>
+            <video
+              data-testid="video"
+              controls
+            >
+              <track
+                default
+                kind="captions"
+              />
               <source src={ e.strYoutube } type="video/mp4" />
-              <track default kind="captions" />
             </video>
             <hr />
-            <div
-              data-testid={ `${i}-recomendation-card` }
-              className="items"
-            >
+            <div className="items">
               {
-                images.map((y, z) => (
-                  <div key={ z } className="item">
-                    <img src={ y.strMealThumb } alt="" />
+                images.slice(0, six).map((y, z) => (
+                  <div
+                    style={
+                      { display: z >= 2 ? 'none' : 'block' }
+                    }
+                    key={ z }
+                    className="item"
+                    data-testid={ `${z}-recomendation-card` }
+                  >
+                    <span data-testid={ `${z}-recomendation-title` }>
+                      { y.strDrink}
+                    </span>
+                    <img
+                      src={ y.strDrinkThumb }
+                      alt=""
+                    />
                   </div>
                 ))
               }

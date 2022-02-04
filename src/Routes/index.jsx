@@ -12,9 +12,9 @@ import ExploreFoodsIngredients from '../Pages/ExploreFoodsIngredients';
 import ExploreDrinksIngredients from '../Pages/ExploreDrinksIngredients';
 import ExploreFoodsNationalities from '../Pages/ExploreFoodsNationalities';
 import Profile from '../Pages/Profile';
-import FavoriteRecipes from '../Pages/FavoriteRecipes';
 import DoneRecipes from '../Pages/DoneRecipes';
 import FoodInProgress from '../Pages/FoodInProgress';
+import FavoriteRecipes from '../Pages/FavoriteRecipes';
 
 function Routes() {
   return (

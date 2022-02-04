@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import WhiteHearthIcon from '../images/whiteHeartIcon.svg';
 import BlackHearthIcon from '../images/blackHeartIcon.svg';
 import API, { API2, API3 } from '../services/drinkDetailsAPI';
-// import '../css/drinkDetails.css';
+import '../css/foodDetails.css';
 
 export default function DetailsDrink() {
   const [images, setImages] = useState([]);
@@ -13,14 +13,14 @@ export default function DetailsDrink() {
   const [ingredients, setIngredients] = useState([]);
   const [copy, setCopy] = useState(false);
   const [fav, setFav] = useState(false);
-  const [recipeAlreadyMade, setRecipeAlreadyMade] = useState(false);
   const [recipeInProgress, setRecipeInProgress] = useState(false);
+  const [recipeAlreadyMade, setRecipeAlreadyMade] = useState(false);
   const history = useHistory();
-  const id = 178319;
+  const params = useParams();
+  const { id } = params;
+  const six = 6;
 
-  const btnStart = () => {
-    history.push(`/food/${id}/in-progress`);
-  };
+  const btnStart = () => history.push(`/drinks/${id}/in-progress`);
 
   const btnShare = () => {
     clipboardCopy(window.location.href);
@@ -28,6 +28,7 @@ export default function DetailsDrink() {
   };
 
   const btnFav = () => {
+    console.log(recipe);
     if (!fav) setFav(true);
     else setFav(false);
     recipe.forEach((e) => {
@@ -35,9 +36,9 @@ export default function DetailsDrink() {
         [{
           id: e.idDrink,
           type: 'drink',
-          nationality: e.strArea,
+          nationality: '',
           category: e.strCategory,
-          alcoholicOrNot: '',
+          alcoholicOrNot: e.strAlcoholic,
           name: e.strDrink,
           image: e.strDrinkThumb,
         }],
@@ -48,36 +49,37 @@ export default function DetailsDrink() {
   // API
   useEffect(() => {
     API().then((r) => setImages(r));
-    API2().then((r) => setRecipe(r));
-    API3().then((r) => setIngredients(r));
-  }, []);
+    API2(id).then((r) => setRecipe(r));
+    API3(id).then((r) => setIngredients(r));
+  }, [id]);
 
   // check recipes already made
   useEffect(() => {
-    JSON.parse(localStorage.getItem('doneRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setRecipeAlreadyMade(false);
-        else setRecipeAlreadyMade(false);
-      });
-  }, []);
+    const storage = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    storage.forEach((e) => {
+      if (e.id.includes(id)) setRecipeAlreadyMade(true);
+      else setRecipeAlreadyMade(false);
+    });
+  }, [id]);
 
-  // check recipes in progress
+  // check in progress recipes
   useEffect(() => {
-    JSON.parse(localStorage.getItem('inProgressRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setRecipeInProgress(true);
-        else setRecipeInProgress(false);
-      });
+    const storage = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { cocktails: [] };
+    console.log(storage);
+    const isInProgress = (Object.keys(storage.cocktails).includes(id));
+    setRecipeInProgress(isInProgress);
   }, []);
 
   // check favorite recipes
   useEffect(() => {
-    JSON.parse(localStorage.getItem('favoriteRecipes'))
-      .forEach((e) => {
-        if (e.id.includes(id)) setFav(true);
-        else setFav(false);
-      });
-  }, []);
+    const storage = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    console.log(storage);
+    storage.forEach((e) => {
+      if (e.id === id) setFav(true);
+      else setFav(false);
+    });
+  }, [id]);
 
   return (
     <div>
@@ -91,7 +93,11 @@ export default function DetailsDrink() {
               width="300px"
             />
             <h2 data-testid="recipe-title">{ e.strDrink }</h2>
-            <p data-testid="recipe-category">{ e.strCategory }</p>
+            <p data-testid="recipe-category">
+              { e.strCategory }
+              <br />
+              { e.strAlcoholic }
+            </p>
             <button
               type="button"
               className="share-btn"
@@ -103,10 +109,13 @@ export default function DetailsDrink() {
             <button
               type="button"
               className="favorite-btn"
-              data-testid="favorite-btn"
               onClick={ btnFav }
             >
-              <img src={ fav ? BlackHearthIcon : WhiteHearthIcon } alt="" />
+              <img
+                data-testid="favorite-btn"
+                src={ fav ? BlackHearthIcon : WhiteHearthIcon }
+                alt=""
+              />
             </button>
             <p>{copy && 'Link copied!'}</p>
             <hr />
@@ -124,19 +133,24 @@ export default function DetailsDrink() {
             <hr />
             <p data-testid="instructions">{ e.strInstructions }</p>
             <hr />
-            <video data-testid="video" controls>
-              <source src={ e.strYoutube } type="video/mp4" />
-              <track default kind="captions" />
-            </video>
-            <hr />
-            <div
-              data-testid={ `${i}-recomendation-card` }
-              className="items"
-            >
+            <div className="items">
               {
-                images.map((y, z) => (
-                  <div key={ z } className="item">
-                    <img src={ y.strDrinkThumb } alt="" />
+                images.slice(0, six).map((y, z) => (
+                  <div
+                    style={
+                      { display: z >= 2 ? 'none' : 'block' }
+                    }
+                    key={ z }
+                    className="item"
+                    data-testid={ `${z}-recomendation-card` }
+                  >
+                    <span data-testid={ `${z}-recomendation-title` }>
+                      { y.strMeal}
+                    </span>
+                    <img
+                      src={ y.strMealThumb }
+                      alt=""
+                    />
                   </div>
                 ))
               }
