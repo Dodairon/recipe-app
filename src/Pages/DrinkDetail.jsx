@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import DetailsDrink from '../components/drinkDetail';
 import context from '../context/context';
 
 function DrinkDetail() {
@@ -20,6 +21,7 @@ function DrinkDetail() {
           </div>
         ))
       }
+      <DetailsDrink />
     </div>
   );
 }

@@ -1,0 +1,33 @@
+.items {
+  display: flex;
+  overflow-x: auto;
+}
+
+.item {
+  flex: none;
+  height: 380px;
+  width: 50%;
+}
+
+.item img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+video {
+  height: 240px;
+  width: 300px;
+}
+
+.share-btn, .favorite-btn {
+  border: none;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+
+.start-recipe-btn {
+  bottom: 0;
+  position: fixed;
+}

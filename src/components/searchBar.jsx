@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import API from '../services/api';
+import API from '../services/searchBarAPI';
 import context from '../context/context';
 
 const msg1 = 'Your search must have only 1 (one) character';
