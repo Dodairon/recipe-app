@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
@@ -6,6 +7,24 @@ import WhiteHearthIcon from '../images/whiteHeartIcon.svg';
 import BlackHearthIcon from '../images/blackHeartIcon.svg';
 import API, { API2, API3 } from '../services/foodDetailsAPI';
 import '../css/foodDetails.css';
+
+const Content = styled.div`
+  padding: 0 20px;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: auto;
+`;
+
+const Button = styled.button`
+  background-color: #227422;
+  border: solid 2px #d4d4d4;
+  margin: 0;
+  padding: 5px 10px;
+  font-weight: bold;
+  color: #d4d4d4;
+`;
 
 export default function DetailsFood() {
   const [images, setImages] = useState([]);
@@ -31,20 +50,22 @@ export default function DetailsFood() {
     if (!fav) setFav(true);
     else setFav(false);
     recipe.forEach((e) => {
-      localStorage.setItem('favoriteRecipes', JSON.stringify(
-        [{
-          id: e.idMeal,
-          type: 'food',
-          nationality: e.strArea,
-          category: e.strCategory,
-          alcoholicOrNot: '',
-          name: e.strMeal,
-          image: e.strMealThumb,
-        }],
-      ));
+      localStorage.setItem(
+        'favoriteRecipes',
+        JSON.stringify([
+          {
+            id: e.idMeal,
+            type: 'food',
+            nationality: e.strArea,
+            category: e.strCategory,
+            alcoholicOrNot: '',
+            name: e.strMeal,
+            image: e.strMealThumb,
+          },
+        ]),
+      );
     });
   };
-  console.log(images);
   // API
   useEffect(() => {
     API().then((r) => setImages(r));
@@ -63,11 +84,12 @@ export default function DetailsFood() {
 
   // check in progress recipes
   useEffect(() => {
-    const storage = JSON.parse(localStorage.getItem('inProgressRecipes'))
-    || { meals: [] };
-    const isInProgress = (Object.keys(storage.meals).includes(id));
+    const storage = JSON.parse(localStorage.getItem('inProgressRecipes')) || {
+      meals: [],
+    };
+    const isInProgress = Object.keys(storage.meals).includes(id);
     setRecipeInProgress(isInProgress);
-  }, []);
+  }, [id]);
 
   // check favorite recipes
   useEffect(() => {
@@ -80,17 +102,17 @@ export default function DetailsFood() {
 
   return (
     <div>
-      {
-        recipe.map((e, i) => (
-          <div key={ i }>
-            <img
-              data-testid="recipe-photo"
-              src={ e.strMealThumb }
-              alt=""
-              width="300px"
-            />
-            <h2 data-testid="recipe-title">{ e.strMeal }</h2>
-            <p data-testid="recipe-category">{ e.strCategory }</p>
+      {recipe.map((e, i) => (
+        <div key={ i }>
+          <Image
+            data-testid="recipe-photo"
+            src={ e.strMealThumb }
+            alt=""
+            width="300px"
+          />
+          <Content>
+            <h2 data-testid="recipe-title">{e.strMeal}</h2>
+            <p data-testid="recipe-category">{e.strCategory}</p>
             <button
               type="button"
               className="share-btn"
@@ -99,11 +121,7 @@ export default function DetailsFood() {
             >
               <img src={ shareIcon } alt="" />
             </button>
-            <button
-              type="button"
-              className="favorite-btn"
-              onClick={ btnFav }
-            >
+            <button type="button" className="favorite-btn" onClick={ btnFav }>
               <img
                 data-testid="favorite-btn"
                 src={ fav ? BlackHearthIcon : WhiteHearthIcon }
@@ -112,70 +130,50 @@ export default function DetailsFood() {
             </button>
             <p>{copy && 'Link copied!'}</p>
             <hr />
-            {
-              ingredients.map((x, w) => (
-                <ul key={ w }>
-                  <li
-                    data-testid={ `${w}-ingredient-name-and-measure` }
-                  >
-                    { x }
-                  </li>
-                </ul>
-              ))
-            }
+            {ingredients.map((x, w) => (
+              <ul key={ w }>
+                <li data-testid={ `${w}-ingredient-name-and-measure` }>{x}</li>
+              </ul>
+            ))}
             <hr />
-            <p data-testid="instructions">{ e.strInstructions }</p>
+            <p data-testid="instructions">{e.strInstructions}</p>
             <hr />
-            <video
+            <iframe
+              title="video"
               data-testid="video"
-              controls
-            >
-              <track
-                default
-                kind="captions"
-              />
-              <source src={ e.strYoutube } type="video/mp4" />
-            </video>
+              width="280"
+              src={ e.strYoutube }
+              frameBorder="0"
+            />
             <hr />
-            <div className="items">
-              {
-                images.slice(0, six).map((y, z) => (
-                  <div
-                    style={
-                      { display: z >= 2 ? 'none' : 'block' }
-                    }
-                    key={ z }
-                    className="item"
-                    data-testid={ `${z}-recomendation-card` }
-                  >
-                    <span data-testid={ `${z}-recomendation-title` }>
-                      { y.strDrink}
-                    </span>
-                    <img
-                      src={ y.strDrinkThumb }
-                      alt=""
-                    />
-                  </div>
-                ))
-              }
+            <div>
+              {images.slice(0, six).map((y, z) => (
+                <div
+                  style={ { display: z >= 1 ? 'none' : 'auto' } }
+                  key={ z }
+                  data-testid={ `${z}-recomendation-card` }
+                >
+                  <span data-testid={ `${z}-recomendation-title` }>
+                    {y.strDrink}
+                  </span>
+                  <Image src={ y.strDrinkThumb } alt="" />
+                </div>
+              ))}
             </div>
             <hr />
-            {
-              !recipeAlreadyMade
-                ? (
-                  <button
-                    type="button"
-                    className="start-recipe-btn"
-                    data-testid="start-recipe-btn"
-                    onClick={ btnStart }
-                  >
-                    { recipeInProgress ? 'Continue Recipe' : 'Start Recipe' }
-                  </button>)
-                : null
-            }
-          </div>
-        ))
-      }
+            {!recipeAlreadyMade ? (
+              <Button
+                type="button"
+                className="start-recipe-btn"
+                data-testid="start-recipe-btn"
+                onClick={ btnStart }
+              >
+                {recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
+              </Button>
+            ) : null}
+          </Content>
+        </div>
+      ))}
     </div>
   );
 }

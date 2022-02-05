@@ -4,7 +4,7 @@ import urlContext from './context';
 
 export default function Provider({ children }) {
   const [result, setResult] = useState([]);
-  const [filterResult, setfilterResult] = useState();
+  const [filterResult, setfilterResult] = useState([]);
   const [favoriteRecipes, setFavoriteRecipes] = React.useState([]);
   const [url, setUrl] = useState({
     searchFor: ['ingredient', 'name', 'first-letter'],

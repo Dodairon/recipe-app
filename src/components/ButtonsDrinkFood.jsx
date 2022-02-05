@@ -19,7 +19,6 @@ function ButtonsDrinkFood(props) {
   const [toggleButton, setToggleButton] = useState('all');
   const five = 5;
   const verifyFilter = filterButton.meals ? filterButton.meals : filterButton.drinks;
-
   useEffect(() => {
     if (toggleButton !== 'all') {
       if (filterButton.meals) {
@@ -30,7 +29,7 @@ function ButtonsDrinkFood(props) {
           .then((firstFood) => setfilterResult(firstFood));
       }
     } else {
-      setfilterResult();
+      setfilterResult([]);
     }
   }, [toggleButton, setfilterResult, filterButton]);
 
@@ -71,7 +70,10 @@ function ButtonsDrinkFood(props) {
 }
 
 ButtonsDrinkFood.propTypes = {
-  filterButton: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.shape)).isRequired,
+  filterButton: PropTypes.shape({
+    meals: PropTypes.arrayOf(PropTypes.object),
+    drinks: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
 };
 
 export default ButtonsDrinkFood;

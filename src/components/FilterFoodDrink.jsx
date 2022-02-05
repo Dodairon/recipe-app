@@ -11,7 +11,6 @@ const Card = styled.div`
   background-color: #fff;
   border-radius: 3px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.219);
-  /* padding: 20px; */
   margin: 10px;
 `;
 
@@ -22,7 +21,12 @@ const CardImage = styled.img`
 `;
 
 const CardTitle = styled.h1`
+  padding: 10px;
   font-size: 1.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
   font-weight: bold;
   color: #000;
 `;

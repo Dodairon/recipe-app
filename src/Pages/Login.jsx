@@ -17,7 +17,7 @@ const Container = styled.div`
 function Login() {
   return (
     <Container>
-      <span className="logo">TRYBE GOSTOSO</span>
+      <span className="logo">GOSTOSURAS</span>
       <object
         className="rocksGlass"
         type="image/svg+xml"
