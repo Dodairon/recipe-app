@@ -1,33 +1,60 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './searchBar';
+
+const Container = styled.div`
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #227422;
+    color: #fff;
+    height: 50px;
+    width: 100%;
+`;
+
+const Title = styled.h1`
+    font-size: 1.5rem;
+    font-weight: bold;
+`;
+
+const Button = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff9bff;
+    border-radius: 50%;
+    border: none;
+    filter: invert(100%);
+    && > img {
+        width: 17px;
+    }
+    width: 35px;
+    height: 35px;
+`;
 
 function Header(props) {
   const [showSearch, setShowSearch] = useState(false);
   const { title, display, drinkScreen } = props;
   const history = useHistory();
   return (
-    <div>
-      <button
-        type="button"
-        data-testid="profile-top-btn"
-        src={ profileIcon }
-        onClick={ () => history.push('/profile') }
-      >
-        <img src={ profileIcon } alt="profile" />
-      </button>
-      <h1
-        data-testid="page-title"
-      >
-        { title }
-      </h1>
+    <>
+      <Container>
+        <Button
+          type="button"
+          data-testid="profile-top-btn"
+          src={ profileIcon }
+          onClick={ () => history.push('/profile') }
+        >
+          <img src={ profileIcon } alt="profile" />
+        </Button>
+        <Title data-testid="page-title">{title}</Title>
 
-      { display
-        && (
-          <button
+        {display && (
+          <Button
             type="button"
             onClick={ () => setShowSearch(!showSearch) }
           >
@@ -36,10 +63,11 @@ function Header(props) {
               src={ searchIcon }
               alt="profile"
             />
-          </button>
-        ) }
-      { showSearch && <SearchBar drinkScreen={ drinkScreen } /> }
-    </div>
+          </Button>
+        )}
+      </Container>
+      {showSearch && <SearchBar drinkScreen={ drinkScreen } />}
+    </>
   );
 }
 

@@ -1,6 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
+const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.219);
+  /* padding: 20px; */
+  margin: 10px;
+`;
+
+const CardImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const CardTitle = styled.h1`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+`;
 
 function FilterFoodDrink(props) {
   const { FoodDrink } = props;
@@ -11,18 +36,18 @@ function FilterFoodDrink(props) {
         FoodDrink.slice(0, twelve).map((e, i) => {
           const foodOrDrink = e.idMeal ? 'foods' : 'drinks';
           return (
-            <Link key={ e } to={ `/${foodOrDrink}/${e.idMeal ? e.idMeal : e.idDrink}` }>
-              <div data-testid={ `${i}-recipe-card` } key={ i }>
-                <p data-testid={ `${i}-card-name` }>
+            <Link key={ i } to={ `/${foodOrDrink}/${e.idMeal ? e.idMeal : e.idDrink}` }>
+              <Card data-testid={ `${i}-recipe-card` }>
+                <CardTitle data-testid={ `${i}-card-name` }>
                   {e.strMeal ? e.strMeal : e.strDrink }
-                </p>
-                <img
+                </CardTitle>
+                <CardImage
                   data-testid={ `${i}-card-img` }
                   src={ e.strMealThumb ? e.strMealThumb : e.strDrinkThumb }
                   alt=""
                   width="200px"
                 />
-              </div>
+              </Card>
             </Link>
           );
         })
