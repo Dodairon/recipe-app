@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import urlContext from './context';
 
 export default function Provider({ children }) {
   const [result, setResult] = useState([]);
   const [filterResult, setfilterResult] = useState();
+  const [favoriteRecipes, setFavoriteRecipes] = React.useState([]);
   const [url, setUrl] = useState({
     searchFor: ['ingredient', 'name', 'first-letter'],
     meals: [
@@ -19,6 +20,12 @@ export default function Provider({ children }) {
     ],
   });
 
+  useEffect(() => {
+    setFavoriteRecipes(
+      JSON.parse(localStorage.getItem('favoriteRecipes')) || [],
+    );
+  }, []);
+
   return (
     <urlContext.Provider
       value={ {
@@ -28,6 +35,8 @@ export default function Provider({ children }) {
         setResult,
         filterResult,
         setfilterResult,
+        favoriteRecipes,
+        setFavoriteRecipes,
       } }
     >
       { children }
