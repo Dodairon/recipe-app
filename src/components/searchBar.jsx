@@ -9,7 +9,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border-bottom: #227422 solid 2px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 10px;
   color: #227422;
   input[type="radio"] {

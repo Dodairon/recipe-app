@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import context from '../context/context';
 import Footer from '../components/Footer';
 import Header from '../components/header';
 
@@ -23,7 +24,7 @@ const PageContainer = styled.div`
 `;
 
 function Explore() {
-  const { setResult } = React.useContext(context);
+  const { setResult } = useContext(context);
   useEffect(() => {
     setResult([]);
   }, [setResult]);
