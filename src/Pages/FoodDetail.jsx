@@ -1,13 +1,25 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 import DetailsFood from '../components/foodDetail';
 import context from '../context/context';
+
+const Header = styled.h1`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #227422;
+  color: #fff;
+  font-size: 1.5rem;
+  padding: 2px;
+  height: 50px;
+`;
 
 function FoodDetail() {
   const { result } = useContext(context);
 
   return (
     <div>
-      <h1>Food Detail</h1>
+      <Header>Food Detail</Header>
       {
         result.map((e, i) => (
           <div data-testid={ `${i}-recipe-card` } key={ i }>

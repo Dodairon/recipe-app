@@ -1,11 +1,23 @@
 import React from 'react';
+import styled from 'styled-components';
 import LoginForm from '../components/loginForm';
 import rockGlass from '../images/rockGlass.svg';
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #227422;
+  color: #fff;
+  height: 100vh;
+  width: 100vw;
+`;
+
 function Login() {
   return (
-    <div>
-      <span className="logo">TRYBE</span>
+    <Container>
+      <span className="logo">GOSTOSURAS</span>
       <object
         className="rocksGlass"
         type="image/svg+xml"
@@ -14,7 +26,7 @@ function Login() {
         Glass
       </object>
       <LoginForm />
-    </div>
+    </Container>
   );
 }
 

@@ -1,8 +1,40 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import API from '../services/searchBarAPI';
 import context from '../context/context';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+  color: #227422;
+  input[type="radio"] {
+    margin: 0 5px;
+  }
+`;
+
+const Input = styled.input`
+  background-color: #227422;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  padding: 1px 5px;
+  margin: 3px;
+`;
+
+const Button = styled.button`
+  background-color: #fff;
+  border: solid 2px #227422;
+  margin: 3px;
+  border-radius: 3px;
+  width: 100px;
+  color: #227422;
+  padding: 1px 5px;
+`;
 
 const msg1 = 'Your search must have only 1 (one) character';
 const msg2 = 'Sorry, we haven\'t found any recipes for these filters.';
@@ -46,10 +78,11 @@ function SearchBar({ drinkScreen }) {
   };
 
   return (
-    <div>
-      <input
+    <Container>
+      <Input
         type="text"
         data-testid="search-input"
+        placeholder="Search..."
         onChange={ ({ target: { value } }) => setIngredient(value) }
       />
       <label htmlFor="ingredient">
@@ -79,10 +112,10 @@ function SearchBar({ drinkScreen }) {
         />
         First letter
       </label>
-      <button type="button" data-testid="exec-search-btn" onClick={ btnSearch }>
+      <Button type="button" data-testid="exec-search-btn" onClick={ btnSearch }>
         Search
-      </button>
-    </div>
+      </Button>
+    </Container>
   );
 }
 

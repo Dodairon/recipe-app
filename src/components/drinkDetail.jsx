@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
@@ -6,6 +7,24 @@ import WhiteHearthIcon from '../images/whiteHeartIcon.svg';
 import BlackHearthIcon from '../images/blackHeartIcon.svg';
 import API, { API2, API3 } from '../services/drinkDetailsAPI';
 import '../css/foodDetails.css';
+
+const Content = styled.div`
+  padding: 0 20px;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: auto;
+`;
+
+const Button = styled.button`
+  background-color: #227422;
+  border: solid 2px #d4d4d4;
+  margin: 0;
+  padding: 5px 10px;
+  font-weight: bold;
+  color: #d4d4d4;
+`;
 
 export default function DetailsDrink() {
   const [images, setImages] = useState([]);
@@ -32,17 +51,20 @@ export default function DetailsDrink() {
     if (!fav) setFav(true);
     else setFav(false);
     recipe.forEach((e) => {
-      localStorage.setItem('favoriteRecipes', JSON.stringify(
-        [{
-          id: e.idDrink,
-          type: 'drink',
-          nationality: '',
-          category: e.strCategory,
-          alcoholicOrNot: e.strAlcoholic,
-          name: e.strDrink,
-          image: e.strDrinkThumb,
-        }],
-      ));
+      localStorage.setItem(
+        'favoriteRecipes',
+        JSON.stringify([
+          {
+            id: e.idDrink,
+            type: 'drink',
+            nationality: '',
+            category: e.strCategory,
+            alcoholicOrNot: e.strAlcoholic,
+            name: e.strDrink,
+            image: e.strDrinkThumb,
+          },
+        ]),
+      );
     });
   };
 
@@ -64,12 +86,13 @@ export default function DetailsDrink() {
 
   // check in progress recipes
   useEffect(() => {
-    const storage = JSON.parse(localStorage.getItem('inProgressRecipes'))
-    || { cocktails: [] };
+    const storage = JSON.parse(localStorage.getItem('inProgressRecipes')) || {
+      cocktails: [],
+    };
     console.log(storage);
-    const isInProgress = (Object.keys(storage.cocktails).includes(id));
+    const isInProgress = Object.keys(storage.cocktails).includes(id);
     setRecipeInProgress(isInProgress);
-  }, []);
+  }, [id]);
 
   // check favorite recipes
   useEffect(() => {
@@ -83,20 +106,20 @@ export default function DetailsDrink() {
 
   return (
     <div>
-      {
-        recipe.map((e, i) => (
-          <div data-testid={ `${i}-recipe-card` } key={ i }>
-            <img
-              data-testid="recipe-photo"
-              src={ e.strDrinkThumb }
-              alt=""
-              width="300px"
-            />
-            <h2 data-testid="recipe-title">{ e.strDrink }</h2>
+      {recipe.map((e, i) => (
+        <div data-testid={ `${i}-recipe-card` } key={ i }>
+          <Image
+            data-testid="recipe-photo"
+            src={ e.strDrinkThumb }
+            alt=""
+            width="300px"
+          />
+          <Content>
+            <h2 data-testid="recipe-title">{e.strDrink}</h2>
             <p data-testid="recipe-category">
-              { e.strCategory }
+              {e.strCategory}
               <br />
-              { e.strAlcoholic }
+              {e.strAlcoholic}
             </p>
             <button
               type="button"
@@ -106,11 +129,7 @@ export default function DetailsDrink() {
             >
               <img src={ shareIcon } alt="" />
             </button>
-            <button
-              type="button"
-              className="favorite-btn"
-              onClick={ btnFav }
-            >
+            <button type="button" className="favorite-btn" onClick={ btnFav }>
               <img
                 data-testid="favorite-btn"
                 src={ fav ? BlackHearthIcon : WhiteHearthIcon }
@@ -119,59 +138,42 @@ export default function DetailsDrink() {
             </button>
             <p>{copy && 'Link copied!'}</p>
             <hr />
-            {
-              ingredients.map((x, w) => (
-                <ul key={ w }>
-                  <li
-                    data-testid={ `${w}-ingredient-name-and-measure` }
-                  >
-                    { x }
-                  </li>
-                </ul>
-              ))
-            }
+            {ingredients.map((x, w) => (
+              <ul key={ w }>
+                <li data-testid={ `${w}-ingredient-name-and-measure` }>{x}</li>
+              </ul>
+            ))}
             <hr />
-            <p data-testid="instructions">{ e.strInstructions }</p>
+            <p data-testid="instructions">{e.strInstructions}</p>
             <hr />
-            <div className="items">
-              {
-                images.slice(0, six).map((y, z) => (
-                  <div
-                    style={
-                      { display: z >= 2 ? 'none' : 'block' }
-                    }
-                    key={ z }
-                    className="item"
-                    data-testid={ `${z}-recomendation-card` }
-                  >
-                    <span data-testid={ `${z}-recomendation-title` }>
-                      { y.strMeal}
-                    </span>
-                    <img
-                      src={ y.strMealThumb }
-                      alt=""
-                    />
-                  </div>
-                ))
-              }
+            <div>
+              {images.slice(0, six).map((y, z) => (
+                <div
+                  style={ { display: z >= 1 ? 'none' : 'block' } }
+                  key={ z }
+                  data-testid={ `${z}-recomendation-card` }
+                >
+                  <span data-testid={ `${z}-recomendation-title` }>
+                    {y.strMeal}
+                  </span>
+                  <Image src={ y.strMealThumb } alt="" />
+                </div>
+              ))}
             </div>
             <hr />
-            {
-              !recipeAlreadyMade
-                ? (
-                  <button
-                    type="button"
-                    className="start-recipe-btn"
-                    data-testid="start-recipe-btn"
-                    onClick={ btnStart }
-                  >
-                    { recipeInProgress ? 'Continue Recipe' : 'Start Recipe' }
-                  </button>)
-                : null
-            }
-          </div>
-        ))
-      }
+            {!recipeAlreadyMade ? (
+              <Button
+                type="button"
+                className="start-recipe-btn"
+                data-testid="start-recipe-btn"
+                onClick={ btnStart }
+              >
+                {recipeInProgress ? 'Continue Recipe' : 'Start Recipe'}
+              </Button>
+            ) : null}
+          </Content>
+        </div>
+      ))}
     </div>
   );
 }
